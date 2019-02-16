@@ -40,6 +40,8 @@ namespace Booking.Models
                 .HasOne(rd => rd.Device)
                 .WithMany(r => r.RoomDevices)
                 .HasForeignKey(rd => rd.RoomId);
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(u => u.Email);
             base.OnModelCreating(modelBuilder);
         }
     }
