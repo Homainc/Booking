@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Explore";
+    var roles = ViewBag.Roles as IEnumerable<Role>;
+    var users = ViewBag.Users as IEnumerable<User>;
+}
+
+<div>
+<h2>Explore</h2>
+<h3>Users</h3>
+<table style="border:1px solid black;">
+    <tr style="border-top:1px solid black;"><td>Id</td><td>Name</td><td>Surname</td><td>RoleId</td></trstyle="border-top:1px>
+    @foreach (var user in users)
+    {
+        <trstyle="border-top:1px solid black;"><td>@user.Id</td><td>@user.Name</td><td>@user.Surname</td><td>@user.RoleId</td></trstyle="border-top:1px>
+    }
+</table>
+
+<h3>Roles</h3>
+<table style="border:1px solid black;">
+    <tr style="border-top:1px solid black;"><td>Id</td><td>Name</td></tr>
+    @foreach (var role in roles)
+    {
+        <tr style="border-top:1px solid black;"><td>@role.Id</td><td>@role.Name</td></tr>
+    }
+</table>
+</div>
