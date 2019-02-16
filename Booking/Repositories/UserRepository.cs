@@ -15,7 +15,7 @@ namespace Booking.Repositories
 
         public User Get(int id) => _db.Users.Find(id);
 
-        public IEnumerable<User> GetAll() => _db.Users.Include(u => u.Role);
+        public IEnumerable<User> GetAll() => _db.Users;
 
         public void Update(User item) => _db.Entry(item).State = EntityState.Modified;
 

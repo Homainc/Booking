@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,10 @@ namespace Booking
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => 
                 options.UseSqlServer(connection));
+            services.AddDbContext<UserContext>(options =>
+                options.UseSqlServer(connection));
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<UserContext>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -56,7 +61,7 @@ namespace Booking
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

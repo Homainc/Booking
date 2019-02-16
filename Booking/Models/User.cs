@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace Booking.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public Role Role { get; set; }
-        public int RoleId { get; set; }
         public ICollection<Reserve> Reserves { get; set; }
-        public User()
+
+        public User() : base()
         {
             Reserves = new List<Reserve>();
         }

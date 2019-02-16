@@ -9,7 +9,6 @@ namespace Booking.Units
     {
         private ApplicationContext _db;
         private UserRepository _userRepository;
-        private RoleRepository _roleRepository;
         private bool _disposed;
 
         public UserUnit(ApplicationContext context)
@@ -19,9 +18,6 @@ namespace Booking.Units
 
         public UserRepository Users => _userRepository ?? 
             (_userRepository = new UserRepository(_db));
-
-        public RoleRepository Roles => _roleRepository ?? 
-            (_roleRepository = new RoleRepository(_db));
 
         public void Save() => _db.SaveChanges();
 

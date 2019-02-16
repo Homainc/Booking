@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Booking.Models
 {
-    public class ApplicationContext : DbContext
+    public class UserContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Building> Buildings { get; set; }
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<Device> Devices { get; set; }
-        public DbSet<Reserve> Reserves { get; set; }
-        public DbSet<ReserveTeam> ReserveTeams { get; set; }
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
             Database.EnsureCreated();
