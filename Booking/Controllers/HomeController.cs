@@ -1,11 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
-using Booking.Models;
-using Booking.Units;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Booking.Controllers
 {
