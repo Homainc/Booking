@@ -1,4 +1,29 @@
 ﻿body {
     padding: 0px;
     margin: 0px;
+    background-color: #E9E9E9;
+}
+
+.field-validation-error {
+    color: red;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid red;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: red;
+}
+
+.validation-summary-valid {
+    display: none;
 }

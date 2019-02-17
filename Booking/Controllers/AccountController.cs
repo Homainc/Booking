@@ -20,11 +20,12 @@ namespace Booking.Controllers
             _signInManager = signInManager;
         }
 
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> CheckEmail(string email) => 
+            Json((await _userManager.FindByEmailAsync(email)) == null);
+
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)

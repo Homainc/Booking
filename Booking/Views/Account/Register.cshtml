@@ -6,33 +6,39 @@
 <h2>Регистрация</h2>
 <form method="post" asp-controller="Account" asp-action="Register">
     <div asp-validation-summary="ModelOnly"></div>
-    <div>
+    <div class="form-group">
         <label asp-for="Name"></label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
+        <input asp-for="Name" class="form-control" placeholder="Введите ваше имя"/>
+        <span class="small" asp-validation-for="Name"></span>
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Surname"></label><br />
-        <input asp-for="Surname" />
-        <span asp-validation-for="Surname"></span>
+        <input asp-for="Surname" class="form-control" placeholder="Введите вашу фамилию" />
+        <span class="small" asp-validation-for="Surname"></span>
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+        <input asp-for="Email" class="form-control" placeholder="Введите адрес вашей электронной почты" />
+        <span class="small" asp-validation-for="Email"></span>
+        <small class="form-text text-muted">
+            Пример: example@example.com
+        </small>
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
+        <input asp-for="Password" class="form-control" placeholder="Введите пароль"/>
+        <span class="small" asp-validation-for="Password"></span>
+        <small class="form-text text-muted">
+        Пароль должен состоять минимум из 6 символов. Должен содержать букву вверхнего, букву нижнего регистра и специальный символ. Например: example#1
+        </small>
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="PasswordConfirm"></label><br />
-        <input asp-for="PasswordConfirm" />
-        <span asp-validation-for="PasswordConfirm"></span>
+        <input asp-for="PasswordConfirm" class="form-control" placeholder="Введите пароль еще раз"/>
+        <span class="small" asp-validation-for="PasswordConfirm"></span>
     </div>
     <div>
-        <input type="submit" value="Регистрация" />
+        <input class="btn btn-primary" type="submit" value="Регистрация" />
     </div>
 </form>
 
