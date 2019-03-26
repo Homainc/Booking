@@ -1,0 +1,113 @@
+﻿@{ 
+    ViewData["Title"] = "Управление зданиями";
+}
+
+<section id="request_delete_building" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтвеждение удаления здания</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Вы действительно хотите удалить это здание?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="delete_building_btn" type="button" class="btn btn-danger">Удалить</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="edit_building_modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактирование</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input name="Id" readonly hidden/>
+                    <div class="row">
+                        <label class="col-lg-2 col-form-label">Адрес</label>
+                        <input name="Address" class="col-lg-10 form-control" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="edit_building_btn" type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="create_building_modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить новое здание</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <label class="col-lg-2 col-form-label">Адрес</label>
+                        <input name="Address" class="col-lg-10 form-control" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button id="create_building_btn" type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Адрес</th>
+                <th>Кол-во комнат</th>
+                <th>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create_building_modal">Добавить здание</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="buildings_tbody"></tbody>
+    </table>
+</div>
+
+@section Scripts{ 
+    <script src="~/js/jquery.tmpl.js" type="text/javascript"></script>
+    <script id="building_tmpl" type="text/x-jquery-tmpl">
+        <tr>
+            <td>${address}</td>
+            <td>${rooms.$values.length}</td>
+            <td>
+                <button data-id="${id}" data-address="${address}" type="button" class="btn btn-outline-secondary"
+                        data-toggle="modal" data-target="#edit_building_modal"
+                        style="padding:0px 4px 4px 4px; margin:0px;">
+                    <img src="/images/baseline_create_black_18dp.png" height="20" width="20" />
+                </button>
+                <button data-id="${id}" type="button" class="btn btn-outline-secondary"
+                        data-toggle="modal" data-target="#request_delete_building"
+                        style="padding:0px 4px 4px 4px; margin:0px;">
+                    <img src="/images/baseline_delete_black_18dp.png" height="20" width="20" />
+                </button>
+            </td>
+        </tr>
+    </script>
+    <script src="~/js/json-parser.js" type="text/javascript"></script>
+    <script src="~/js/admin-buildings.js" type="text/javascript"></script>
+}

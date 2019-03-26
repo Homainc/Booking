@@ -1,0 +1,44 @@
+﻿@model BookingManagerFormModel
+<div class="modal fade" id="bookingWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Забронировать</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="reserveForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="TimeStart"></label><br />
+                        <input asp-for="TimeStart" class="form-control time-start" type="text" />
+                        <span class="small" asp-validation-for="TimeStart"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TimeEnd"></label><br />
+                        <input asp-for="TimeEnd" class="form-control time-end" type="text" />
+                        <span class="small" asp-validation-for="TimeEnd"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Команда</label><br />
+                        <div class="list-group" id="parcipiantsList">
+                            <a data-id="0" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Нету участников</a>
+                        </div>
+                        <div class="input-group mt-2">
+                            <input asp-for="Email" placeholder="Введите эл. адрес участника" class="form-control" aria-describedby="addInTeamBtn" />
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" onclick="addToTeamBtn();" type="button" id="addInTeamBtn">Добавить в команду</button>
+                            </div>
+                        </div>
+                        <span class="small" asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="saveReserve();">Забронировать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

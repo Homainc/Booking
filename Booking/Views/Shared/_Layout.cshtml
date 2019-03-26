@@ -17,52 +17,70 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" asp-action="Index" asp-controller="Home">Booking</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNavigation">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="Index" asp-controller="Home">Главная</a>
-                </li>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li class="nav-item navbar-text">
-                        <i>@User.Identity.Name</i>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home">Booking</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavigation">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="LogOff" asp-controller="Account">Выйти</a>
-                    </li> 
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Login" asp-controller="Account">Вход</a>
+                        <a class="nav-link" asp-action="Booking" asp-controller="Home">Бронирование</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Register" asp-controller="Account">Регистрация</a>
+                        <a class="nav-link" asp-action="Reserves" asp-controller="Admin">Заказы</a>
                     </li>
-                }
-            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Buildings" asp-controller="Admin">Здания</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Rooms" asp-controller="Admin">Комнаты</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item navbar-text">
+                            <i>@User.Identity.Name</i>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="LogOff" asp-controller="Account">Выйти</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Login" asp-controller="Account">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Register" asp-controller="Account">Регистрация</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container content-title">
+            <h2 style="color: white;">@ViewData["Title"]</h2>
         </div>
-    </nav>
-    <div class="container" style="padding-top: 20px;">
-        @RenderBody()
-    </div>
+        <div class="container content-body" style="padding-top: 20px;">
+            @RenderBody()
+        </div>
+    </main>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    
-    @RenderSection("Scripts", required: false);
-    
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

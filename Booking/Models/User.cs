@@ -11,10 +11,12 @@ namespace Booking.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public ICollection<Reserve> Reserves { get; set; }
+        public ICollection<ReserveTeamUser> ReserveTeamUser { get; set; }
 
         public User() : base()
         {
             Reserves = new List<Reserve>();
+            ReserveTeamUser = new List<ReserveTeamUser>();
         }
     }
 }

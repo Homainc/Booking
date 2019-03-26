@@ -25,6 +25,10 @@ namespace Booking.Controllers
         public async Task<IActionResult> CheckEmail(string email) => 
             Json((await _userManager.FindByEmailAsync(email)) == null);
 
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> CheckEmailForExist(string email) =>
+            Json((await _userManager.FindByEmailAsync(email)) != null);
+
         [HttpGet]
         public IActionResult Register() => View();
 

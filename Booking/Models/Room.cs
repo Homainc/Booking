@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Booking.Models
 {
@@ -14,9 +11,15 @@ namespace Booking.Models
         public int BuildingId { get; set; }
         public Building Building { get; set; }
         public ICollection<RoomDevice> RoomDevices { get; set; }
+
         public Room()
         {
             RoomDevices = new List<RoomDevice>();
+        }
+
+        public override string ToString()
+        {
+            return $"{Number}, {Floor} этаж, {Info}";
         }
     }
 }

@@ -10,9 +10,12 @@ namespace Booking.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<RoomDevice> RoomDevices { get; set; }
+
         public Device()
         {
             RoomDevices = new List<RoomDevice>();
         }
+
+        public override string ToString() => Name;
     }
 }
