@@ -39,5 +39,7 @@ namespace Booking.Controllers
             ViewBag.BuildingsList = new SelectList(buildings, "Id", "Address");
             return View();
         }
+
+        public IActionResult Devices() => View();
     }
 }
