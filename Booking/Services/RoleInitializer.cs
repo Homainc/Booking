@@ -33,7 +33,8 @@ namespace Booking.Services
                     Name = adminName,
                     Surname = adminSurname,
                     Email = adminEmail,
-                    UserName = adminEmail
+                    UserName = adminEmail,
+                    EmailConfirmed = true
                 };
                 var result = await userManager.CreateAsync(admin, adminPassword);
                 if (result.Succeeded)

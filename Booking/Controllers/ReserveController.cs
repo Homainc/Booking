@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
 using Booking.Models.API;
-using Booking.ViewModels;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,12 +16,14 @@ namespace Booking.Controllers
     public class ReserveController : ControllerBase
     {
         private UserContext _appContext;
+        private UserManager<User> _userManager;
         private ILogger _log;
 
-        public ReserveController(UserContext appContext, ILogger<ReserveController> log)
+        public ReserveController(UserContext appContext, ILogger<ReserveController> log, UserManager<User> userManager)
         {
             _log = log;
             _appContext = appContext;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -34,7 +35,22 @@ namespace Booking.Controllers
                 .OrderBy(x => x.DateTime)
                 .ToListAsync();
 
-        [HttpGet("{id}")]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetByUser()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            if (user == null)
+                return NotFound();
+            var userReserves = await _appContext.Reserve
+                .Include(x => x.Room).ThenInclude(x => x.Building)
+                .Include(x => x.Team).ThenInclude(x => x.ReserveTeamUser)
+                .Where(x => x.Team.ReserveTeamUser.Any(y => y.UserId == user.Id))
+                .OrderBy(x => x.DateTime)
+                .ToListAsync();
+            return new JsonResult(userReserves);
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
             var reserve = await _appContext.Reserve.SingleOrDefaultAsync(x => x.Id == id);
@@ -43,7 +59,7 @@ namespace Booking.Controllers
             return new ObjectResult(reserve);
         }
 
-        [HttpGet("{id}/{date}")]
+        [HttpGet("{id:int}/{date}")]
         public async Task<IActionResult> GetByRoomAndDate(int id, string date)
         {
             DateTime bookDate;
@@ -56,7 +72,7 @@ namespace Booking.Controllers
             return new JsonResult(reserve);
         }
 
-        [HttpGet("{buildingId}-{roomId}/{userEmail}/{eventDate}")]
+        [HttpGet("{buildingId:int}-{roomId:int}/{userEmail}/{eventDate}")]
         public async Task<IActionResult> GetAllWithFilter([FromRoute]int buildingId, int roomId, string eventDate, string userEmail)
         {
             IQueryable<Reserve> reserves = _appContext.Reserve
@@ -95,7 +111,7 @@ namespace Booking.Controllers
                 UserId = user.Id                
             };
             var devList = await _appContext.Device.Where(x => item.Devices.Contains(x.Id)).ToListAsync();
-            devList.ForEach(x => x.RoomDevices.Add(new RoomDevice { DeviceId = x.Id, RoomId = item.RoomId}));
+            devList.ForEach(x => x.RoomId = item.RoomId);
             await _appContext.Reserve.AddAsync(reserve);
             var reserveTeam = new ReserveTeam{ReserveId = reserve.Id};
             await _appContext.ReserveTeam.AddAsync(reserveTeam);

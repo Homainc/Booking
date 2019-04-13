@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
@@ -25,7 +24,7 @@ namespace Booking.Controllers
         {
             var room = await _appContext.Room
                 .Include(x => x.Building)
-                .Include(x => x.RoomDevices)
+                .Include(x => x.Devices)
                 .SingleOrDefaultAsync(x => x.Id == id);
             if (room == null)
                 return NotFound();

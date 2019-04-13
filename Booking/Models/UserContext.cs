@@ -20,17 +20,7 @@ namespace Booking.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Database configuration
-            // Many-to-many for Room-Device
-            modelBuilder.Entity<RoomDevice>()
-                .HasKey(rd => new { rd.DeviceId, rd.RoomId });
-            modelBuilder.Entity<RoomDevice>()
-                .HasOne(rd => rd.Room)
-                .WithMany(d => d.RoomDevices)
-                .HasForeignKey(rd => rd.DeviceId);
-            modelBuilder.Entity<RoomDevice>()
-                .HasOne(rd => rd.Device)
-                .WithMany(r => r.RoomDevices)
-                .HasForeignKey(rd => rd.RoomId);
+            // Alternate key for User email
             modelBuilder.Entity<User>()
                 .HasAlternateKey(u => u.Email);
 

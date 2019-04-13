@@ -11,12 +11,12 @@ function showDeviceMenu() {
     document.getElementById("addDeviceBtn").classList.toggle("search-btn-index");
 }
 function filterDevices() {
-    var input, filter, ul, li, a, i;
+    let input, filter, a;
     input = document.getElementById("searchDevice");
     filter = input.value.toUpperCase();
     div = document.getElementById("deviceList");
     a = div.getElementsByTagName("a");
-    for (i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             a[i].style.display = "";
@@ -26,9 +26,8 @@ function filterDevices() {
     }
 }
 function addToDeviceList(caller) {
-    var list;
-    list = document.getElementById("currentDevices");
-    span = document.createElement("span");
+    let list = document.getElementById("currentDevices");
+    let span = document.createElement("span");
     span.className = "badge badge-secondary";
     span.textContent = caller.textContent;
     span.dataset.id = caller.dataset.id;
@@ -39,11 +38,17 @@ function addToDeviceList(caller) {
         list.firstElementChild.setAttribute("hidden", "hidden");
     }
 }
+function clearDeviceList() {
+    let list = document.getElementById("currentDevices");
+    let devicesList = document.getElementById("deviceList");
+    $.each($(devicesList).find('a'), (i, v) => $(v).attr('hidden') && $(v).remove());
+    list.firstElementChild.removeAttribute("hidden");
+    $.each($(list).find('span'), (i, v) => v.remove());
+}
 function removeFromDeviceList(caller) {
-    var list, devicesList;
-    list = document.getElementById("currentDevices");
-    devicesList = document.getElementById("deviceList");
-    devices = devicesList.getElementsByTagName("a");
+    let list = document.getElementById("currentDevices");
+    let devicesList = document.getElementById("deviceList");
+    let devices = devicesList.getElementsByTagName("a");
     for (i = 0; i < devices.length; i++) {
         if (devices[i].dataset.id == caller.dataset.id) {
             devices[i].removeAttribute("hidden", "hidden");
@@ -55,12 +60,12 @@ function removeFromDeviceList(caller) {
     list.removeChild(caller);
 }
 function getBuildingRooms(list) {
-    bid = list.options[list.selectedIndex].value;
+    const bid = list.options[list.selectedIndex].value;
     if (bid == 0) {
         clearList(document.getElementById("roomList"));
         return;
     }
-    var request = new XMLHttpRequest();
+    let request = new XMLHttpRequest();
     request.open('GET', buildingUri + "/" + bid);
     request.responseType = "json";
     request.send();
@@ -103,8 +108,8 @@ function refreshRoomList(building) {
 function showSchedule() {
     document.getElementById("loadingAnimation").classList.remove("collapse");
     let roomList = document.getElementById("roomList");
-    let rid = roomList.options[roomList.selectedIndex].value;
-    var request = new XMLHttpRequest();
+    const rid = roomList.options[roomList.selectedIndex].value;
+    let request = new XMLHttpRequest();
     request.open('GET', roomUri + '/' + rid);
     request.responseType = "json";
     request.send();
@@ -134,31 +139,31 @@ function populateScheduleWithRoom(result, date) {
 function populateScheduleWithTimeLine(reserves) {
     let timeline = document.getElementById("timeline");
     timeline.innerHTML = '';
-    reservesList = reserves["$values"];
+    let reservesList = reserves["$values"];
     if (reservesList.length == 0) {
         addToTimeLine(timeline, "8:00", "22:00", "free");
         return;
     }
-    var i = 0;
-    currRDate = new Date(Date.parse(reservesList[i]["dateTime"]));
-    lastRDate = new Date(currRDate);
+    let i = 0;
+    let currRDate = new Date(Date.parse(reservesList[i]["dateTime"]));
+    let lastRDate = new Date(currRDate);
     lastRDate.setHours(8);
     lastRDate.setMinutes(0);
     while (lastRDate.getHours() != 22) {
         if (lastRDate.getHours() < currRDate.getHours() ||
             (lastRDate.getHours() == currRDate.getHours() && lastRDate.getMinutes() < currRDate.getMinutes())) {
-            lDate = getTimeStrFromDate(lastRDate);
-            rDate = getTimeStrFromDate(currRDate);
+            let lDate = getTimeStrFromDate(lastRDate);
+            let rDate = getTimeStrFromDate(currRDate);
             addToTimeLine(timeline, lDate, rDate, "free", null);
             lastRDate = new Date(currRDate);
         }
         else {
             lastRDate.setMinutes(currRDate.getMinutes() + reservesList[i]["hours"]*60);
-            lDate = getTimeStrFromDate(currRDate);
-            rDate = getTimeStrFromDate(lastRDate);
-            user = reservesList[i]["user"]
+            let lDate = getTimeStrFromDate(currRDate);
+            let rDate = getTimeStrFromDate(lastRDate);
+            let user = reservesList[i]["user"];
             addToTimeLine(timeline, lDate, rDate, "busy", user);
-            i++
+            i++;
             if (i < reservesList.length) {
                 currRDate = new Date(Date.parse(reservesList[i]["dateTime"]));
             }
@@ -170,7 +175,7 @@ function populateScheduleWithTimeLine(reserves) {
     }
 }
 function addToTimeLine(timeline, lDate, rDate, divClass, user) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList = "base-timeline " + divClass + "-timeline";
     div.innerHTML = lDate + "-" + rDate + (user != null ? "<p>" + user["name"] + " " + user["surname"] + "</p>" : '');
     if (divClass == "free") {
@@ -182,14 +187,14 @@ function addToTimeLine(timeline, lDate, rDate, divClass, user) {
     timeline.appendChild(div);
 }
 function getTimeStrFromDate(d) {
-    var h = ("0" + d.getHours()).slice(-2);
-    var m = ("0" + d.getMinutes()).slice(-2);
+    const h = ("0" + d.getHours()).slice(-2);
+    const m = ("0" + d.getMinutes()).slice(-2);
     return h + ":" + m;
 }
 function getDateStrFromDate(d) {
-    var day = ("0" + d.getDate()).slice(-2);
-    var mon = ("0" + (d.getMonth()+1)).slice(-2);
-    var year = d.getFullYear();
+    const day = ("0" + d.getDate()).slice(-2),
+          mon = ("0" + (d.getMonth()+1)).slice(-2),
+          year = d.getFullYear();
     return day + '.' + mon + '.' + year;
 }
 $("#bookingWindow").on("show.bs.modal", function (e) {
@@ -235,7 +240,7 @@ function getParticipantEmails() {
     if (list.firstElementChild.innerHTML == "Нету участников")
         return [];
     let items = Array.from(list.getElementsByTagName("a"));
-    var result = [];
+    let result = [];
     items.forEach(function (item) {
         result.push(item.innerHTML);
     });
@@ -262,6 +267,7 @@ function saveReserve() {
         data: JSON.stringify(reserveAPI),
         success: function (result) {
             showSchedule();
+            clearDeviceList();
             $("#bookingWindow").modal('hide');
         },
         error: function (xhr, status, error) {
@@ -269,10 +275,10 @@ function saveReserve() {
         },
     });
 }
-function getDateTimeStr(d,t) {
-    var day = ("0" + d.getDate()).slice(-2);
-    var mon = ("0" + (d.getMonth() + 1)).slice(-2);
-    var year = d.getFullYear();
+function getDateTimeStr(d, t) {
+    const day = ("0" + d.getDate()).slice(-2),
+          mon = ("0" + (d.getMonth() + 1)).slice(-2),
+          year = d.getFullYear();
     return mon + '.' + day + '.' + year + ' ' + t + ':00';
 }
 function getDevicesArray() {

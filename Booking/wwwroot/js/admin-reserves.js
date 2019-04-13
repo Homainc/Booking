@@ -50,7 +50,7 @@ $('#request_delete_reserve').on('show.bs.modal', function (e) {
 $(document).delegate('#delete_reserve_btn', 'click', function (e) {
     $.ajax({
         type: 'DELETE',
-        url: '/api/reserve/' + $(this).data('id'),
+        url: '/api/reserve/' + this.dataset.id,
         cache: false,
         success: function () {
             getReserves();

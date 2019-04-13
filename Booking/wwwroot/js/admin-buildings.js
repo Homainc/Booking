@@ -23,7 +23,7 @@ $('#request_delete_building').on('show.bs.modal', function (e) {
 $(document).delegate('#delete_building_btn', 'click', function (e) {
     $.ajax({
         type: 'DELETE',
-        url: '/api/building/' + $(this).data('id'),
+        url: '/api/building/' + this.dataset.id,
         success: function () {
             getBuildings();
             $('#request_delete_building').modal('hide');

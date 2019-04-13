@@ -22,7 +22,7 @@ namespace Booking.Controllers
         {
             var buildings = await _appContext.Building.ToListAsync();
             var rooms = new List<Room>();
-            var freeDevices = await _appContext.Device.Include(x => x.RoomDevices).Where(x => x.RoomDevices.Count == 0).ToListAsync();
+            var freeDevices = await _appContext.Device.Where(x => x.RoomId == null).ToListAsync();
             buildings.Insert(0, new Building { Id=0, Address="Не выбрано" });
             rooms.Insert(0, new Room { Id = 0, Number="Не выбрано"});
             var model = new BookingFilterViewModel

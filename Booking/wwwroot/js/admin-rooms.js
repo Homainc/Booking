@@ -35,7 +35,7 @@ $('#request_delete_room').on('show.bs.modal', function (e) {
 $(document).delegate('#delete_room_btn', 'click', function (e) {
     $.ajax({
         type: 'DELETE',
-        url: '/api/room/' + $(this).data('id'),
+        url: '/api/room/' + this.dataset.id,
         contentType: 'application/json',
         success: function () {
             $("#request_delete_room").modal('hide');

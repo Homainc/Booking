@@ -23,7 +23,7 @@ $('#request_delete_device').on('show.bs.modal', function (e) {
 $(document).delegate('#delete_device_btn', 'click', function (e) {
     $.ajax({
         type: 'DELETE',
-        url: '/api/device/' + $(this).data('id'),
+        url: '/api/device/' + this.dataset.id,
         success: function () {
             getDevices();
             $('#request_delete_device').modal('hide');

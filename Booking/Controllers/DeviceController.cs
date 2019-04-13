@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +16,8 @@ namespace Booking.Controllers
         public DeviceController(UserContext appContext) => _appContext = appContext;
 
         [HttpGet]
-        public async Task<IEnumerable<Device>> GetAll() => await _appContext.Device.ToListAsync();
+        public async Task<IEnumerable<Device>> GetAll() => 
+            await _appContext.Device.ToListAsync();
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -29,6 +27,10 @@ namespace Booking.Controllers
                 return NotFound();
             return new ObjectResult(device);
         }
+
+        [HttpGet("avaliable")]
+        public async Task<IEnumerable<Device>> GetAvaliable() => 
+            await _appContext.Device.Where(x => x.RoomId == null).ToListAsync();
 
         [HttpPost]
         public async Task<IActionResult> Create(Device item)
