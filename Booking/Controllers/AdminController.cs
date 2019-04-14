@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
 using Booking.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private UserContext _appContext;

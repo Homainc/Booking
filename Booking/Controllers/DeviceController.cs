@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,7 @@ namespace Booking.Controllers
             await _appContext.Device.Where(x => x.RoomId == null).ToListAsync();
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Device item)
         {
             if (item == null)
@@ -55,6 +57,7 @@ namespace Booking.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var device = await _appContext.Device.SingleOrDefaultAsync(x => x.Id == id);

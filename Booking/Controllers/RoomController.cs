@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Booking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,7 @@ namespace Booking.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Room room)
         {
             if (room == null)
@@ -42,6 +44,7 @@ namespace Booking.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(Room room)
         {
             if (room == null)
@@ -54,6 +57,7 @@ namespace Booking.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var room = await _appContext.Room.FirstOrDefaultAsync(x => x.Id == id);

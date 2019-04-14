@@ -1,5 +1,6 @@
 ﻿using Booking.Models;
 using Booking.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace Booking.Controllers
 
         public IActionResult Index() => View();
 
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> Booking()
         {
             var buildings = await _appContext.Building.ToListAsync();

@@ -66,6 +66,7 @@ namespace Booking.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();

@@ -134,6 +134,9 @@ function populateScheduleWithRoom(result, date) {
     block.getElementsByClassName("room-floor")[0].innerText = result["floor"];
     block.getElementsByClassName("room-number")[0].innerText = result["number"];
     block.getElementsByClassName("room-info")[0].innerText = result["info"];
+    let devicesString = '';
+    result.devices.$values.forEach((v, i, arr) => devicesString += v.name + (i == arr.length - 1 ? '' : ', '));
+    block.getElementsByClassName("room-device")[0].innerText = devicesString;
     block.getElementsByClassName("schedule-date")[0].innerText = date;
 }
 function populateScheduleWithTimeLine(reserves) {
@@ -258,7 +261,6 @@ function saveReserve() {
         RoomId: rL.options[rL.selectedIndex].value,
         Devices: getDevicesArray()
     };
-    console.log(reserveAPI);
     $.ajax({
         type: "POST",
         url: reserveUri,

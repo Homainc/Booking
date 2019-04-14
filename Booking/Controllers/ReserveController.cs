@@ -42,9 +42,25 @@ namespace Booking.Controllers
             if (user == null)
                 return NotFound();
             var userReserves = await _appContext.Reserve
+                .Include(x => x.User)
                 .Include(x => x.Room).ThenInclude(x => x.Building)
                 .Include(x => x.Team).ThenInclude(x => x.ReserveTeamUser)
                 .Where(x => x.Team.ReserveTeamUser.Any(y => y.UserId == user.Id))
+                .OrderBy(x => x.DateTime)
+                .ToListAsync();
+            return new JsonResult(userReserves);
+        }
+
+        [HttpGet("manager")]
+        public async Task<IActionResult> GetByManager()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            if (user == null)
+                return NotFound();
+            var userReserves = await _appContext.Reserve
+                .Include(x => x.Room).ThenInclude(x => x.Building)
+                .Include(x => x.User)
+                .Where(x => x.UserId == user.Id)
                 .OrderBy(x => x.DateTime)
                 .ToListAsync();
             return new JsonResult(userReserves);
@@ -132,7 +148,27 @@ namespace Booking.Controllers
             return Ok(item);
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut("decline/{id:int}")]
+        public async Task<IActionResult> DeclineReserve(int id)
+        {
+            var reserve = await _appContext.Reserve
+                .Include(x => x.Team).ThenInclude(x => x.ReserveTeamUser)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            if (reserve == null)
+                return NotFound();
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            if(reserve.Team.ReserveTeamUser.Any(x => x.UserId == user.Id))
+            {
+                var deleted = reserve.Team.ReserveTeamUser.Single(x => x.UserId == user.Id);
+                reserve.Team.ReserveTeamUser.Remove(deleted);
+                _appContext.Entry(reserve).State = EntityState.Modified;
+                await _appContext.SaveChangesAsync();
+                return Ok(reserve);
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var reserve = await _appContext.Reserve.SingleOrDefaultAsync(x => x.Id == id);
