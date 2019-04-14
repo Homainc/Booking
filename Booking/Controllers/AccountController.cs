@@ -88,6 +88,8 @@ namespace Booking.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var dbUser = await _userManager.FindByEmailAsync(user.Email);
+                    await _userManager.AddToRoleAsync(dbUser, "user");
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(
                         "ConfirmEmail",
@@ -120,7 +122,7 @@ namespace Booking.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                var msg = $"Поздравляем! Регистрация прошла успешна. Адрес {user.Email} подтверждён.";
+                var msg = $"Поздравляем! Регистрация прошла успешно. Адрес {user.Email} подтверждён.";
                 return View("Info", new InfoViewModel { Title = "Завершение регистрации", Message = msg });
             }
             else

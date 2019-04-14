@@ -43,5 +43,7 @@ namespace Booking.Controllers
         }
 
         public IActionResult Devices() => View();
+
+        public IActionResult Users() => View();
     }
 }

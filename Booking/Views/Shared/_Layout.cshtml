@@ -28,25 +28,29 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-action="Index" asp-controller="Home">Главная</a>
                     </li>
-                    @if (User.IsInRole("manager") || User.IsInRole("admin")) {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Booking" asp-controller="Home">Бронирование</a>
-                    </li>
+                    @if (User.IsInRole("manager") || User.IsInRole("admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Booking" asp-controller="Home">Бронирование</a>
+                        </li>
                     }
                     @if (User.IsInRole("admin"))
                     {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Reserves" asp-controller="Admin">Заказы</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Buildings" asp-controller="Admin">Здания</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Rooms" asp-controller="Admin">Комнаты</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Devices" asp-controller="Admin">Оборудование</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Reserves" asp-controller="Admin">Заказы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Buildings" asp-controller="Admin">Здания</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Rooms" asp-controller="Admin">Комнаты</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Devices" asp-controller="Admin">Оборудование</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Users" asp-controller="Admin">Пользователи</a>
+                        </li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
