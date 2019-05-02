@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Booking.Models;
 using Booking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Booking.Controllers
 {
@@ -45,5 +48,20 @@ namespace Booking.Controllers
         public IActionResult Devices() => View();
 
         public IActionResult Users() => View();
+
+        public async Task<String> ReservesXML()
+        {
+            var reserves = await _appContext.Reserve
+                .Include(x => x.User)
+                .Include(x => x.Team).ThenInclude(x => x.ReserveTeamUser)
+                .Include(x => x.Room).ThenInclude(x => x.Building)
+                .ToListAsync();
+            var settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+            var json = JsonConvert.SerializeObject(reserves, Formatting.Indented, settings);
+            var xml = JsonConvert.DeserializeXmlNode("{\"reserve\":"+json+"}", "root");
+            return xml.OuterXml;
+        }
     }
 }
