@@ -10,6 +10,7 @@
             </div>
             <form id="reserveForm">
                 <div class="modal-body">
+                    <div id="booking_errors" class="alert alert-danger collapse" role="alert"></div>
                     <div class="form-group">
                         <label asp-for="TimeStart"></label><br />
                         <input asp-for="TimeStart" class="form-control time-start" type="text" />

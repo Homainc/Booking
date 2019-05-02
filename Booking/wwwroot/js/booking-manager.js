@@ -180,7 +180,7 @@ function populateScheduleWithTimeLine(reserves) {
 function addToTimeLine(timeline, lDate, rDate, divClass, user) {
     let div = document.createElement("div");
     div.classList = "base-timeline " + divClass + "-timeline";
-    div.innerHTML = lDate + "-" + rDate + (user != null ? "<p>" + user["name"] + " " + user["surname"] + "</p>" : '');
+    div.innerHTML = lDate + "-" + rDate + (user != null ? "<p>" + user["name"] + " " + user["surname"] +' (' +user["email"] + ")</p>" : '');
     if (divClass == "free") {
         div.dataset.toggle = "modal";
         div.dataset.target = "#bookingWindow";
@@ -271,12 +271,22 @@ function saveReserve() {
             showSchedule();
             clearDeviceList();
             $("#bookingWindow").modal('hide');
+            $('#booking_errors').addClass('collapse');
         },
         error: function (xhr, status, error) {
-            alert("Not access!");
+            let eblock = $('#booking_errors');
+            eblock.text(xhr.responseText);
+            eblock.removeClass('collapse');
         },
     });
 }
+
+$('#bookingWindow').on('hide.bs.modal', function () {
+    let eblock = $('#booking_errors');
+    if (!eblock.hasClass('collapse'))
+        eblock.addClass('collapse');
+});
+
 function getDateTimeStr(d, t) {
     const day = ("0" + d.getDate()).slice(-2),
           mon = ("0" + (d.getMonth() + 1)).slice(-2),

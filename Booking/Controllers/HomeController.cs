@@ -19,7 +19,7 @@ namespace Booking.Controllers
 
         public IActionResult Index() => View();
 
-        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager,admin")]
         public async Task<IActionResult> Booking()
         {
             var buildings = await _appContext.Building.ToListAsync();

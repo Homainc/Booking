@@ -33,7 +33,6 @@ namespace Booking
                 }
             }
             host.Run();
-
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

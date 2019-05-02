@@ -59,6 +59,7 @@ namespace Booking.Controllers
                 return NotFound();
             var userReserves = await _appContext.Reserve
                 .Include(x => x.Room).ThenInclude(x => x.Building)
+                .Include(x => x.Team).ThenInclude(x => x.ReserveTeamUser)
                 .Include(x => x.User)
                 .Where(x => x.UserId == user.Id)
                 .OrderBy(x => x.DateTime)
@@ -84,6 +85,7 @@ namespace Booking.Controllers
             var reserve = await _appContext.Reserve
                 .Include(x => x.User)
                 .Where(x => x.RoomId == id && x.DateTime.Date.CompareTo(bookDate.Date) == 0)
+                .OrderBy(x => x.DateTime)
                 .ToListAsync();
             return new JsonResult(reserve);
         }
@@ -115,6 +117,8 @@ namespace Booking.Controllers
         {
             if (item == null)
                 return BadRequest();
+            if (item.Participants.Contains(User.Identity.Name))
+                return BadRequest("Нельзя добавлять себя в участников!");
             var participants = await _appContext.Users.Where(x => item.Participants.Contains(x.Email)).ToListAsync();
             double dHours = item.EndDate.Hour - item.StartDate.Hour;
             dHours += (item.EndDate.Minute - item.StartDate.Minute) / 60.0;
@@ -126,6 +130,11 @@ namespace Booking.Controllers
                 RoomId = item.RoomId,
                 UserId = user.Id                
             };
+            var checkReserves = _appContext.Reserve.Where(x => x.DateTime.Date == item.StartDate.Date 
+                && ((x.DateTime > item.StartDate && x.DateTime < item.EndDate)
+                || (x.DateTime.AddHours(x.Hours) > item.StartDate && x.DateTime.AddHours(x.Hours) < item.EndDate)));
+            if (checkReserves.Count() != 0)
+                return BadRequest("Заказ пересекается с другим заказом по времени!");
             var devList = await _appContext.Device.Where(x => item.Devices.Contains(x.Id)).ToListAsync();
             devList.ForEach(x => x.RoomId = item.RoomId);
             await _appContext.Reserve.AddAsync(reserve);
