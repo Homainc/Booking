@@ -122,3 +122,15 @@ input[type="checkbox"].input-validation-error {
     margin-left: 2px;
     cursor: pointer;
 }
+
+div.empty-list{
+    text-align: center;
+    margin: 0 auto;
+}
+
+div.empty-list img{
+    opacity: 0.7;
+    height: 40px;
+    width: 40px;
+    margin-right: 5px;
+}

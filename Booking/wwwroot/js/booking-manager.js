@@ -277,7 +277,7 @@ function saveReserve() {
             let eblock = $('#booking_errors');
             eblock.text(xhr.responseText);
             eblock.removeClass('collapse');
-        },
+        }
     });
 }
 

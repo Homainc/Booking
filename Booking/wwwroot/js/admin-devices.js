@@ -10,6 +10,7 @@ function getDevices() {
         contentType: 'application/json',
         success: function (devices) {
             devices = parseWithRefs(devices);
+            checkEmpty(devices.$values);
             $('#devices_tbody').empty();
             $('#device_tmpl').tmpl(devices.$values).appendTo('#devices_tbody');
         }
@@ -48,13 +49,30 @@ $(document).delegate('#create_device_btn', 'click', function (e) {
         success: function () {
             getDevices();
             modal.modal('hide');
-        }
+        },
+        error: function (xhr, status, error) {
+            let eblock = $('#create_device_errors');
+            eblock.text(xhr.responseText);
+            eblock.removeClass('collapse');
+        },
     });
 });
 
 $('#edit_device_modal').on('show.bs.modal', function (e) {
     $(this).find('input[name = "Id"]')[0].value = e.relatedTarget.dataset.id;
     $(this).find('input[name = "Name"]')[0].value = e.relatedTarget.dataset.name;
+});
+
+$('#edit_device_modal').on('hide.bs.modal', function (e) {
+    let eblock = $('#edit_device_errors');
+    if (!eblock.hasClass('collapse'))
+        eblock.addClass('collapse');
+});
+
+$('#create_device_modal').on('hide.bs.modal', function (e) {
+    let eblock = $('#create_device_errors');
+    if (!eblock.hasClass('collapse'))
+        eblock.addClass('collapse');
 });
 
 $(document).delegate('#edit_device_btn', 'click', function (e) {
@@ -71,6 +89,11 @@ $(document).delegate('#edit_device_btn', 'click', function (e) {
         success: function () {
             getDevices();
             modal.modal('hide');
-        }
+        },
+        error: function (xhr, status, error) {
+            let eblock = $('#edit_device_errors');
+            eblock.text(xhr.responseText);
+            eblock.removeClass('collapse');
+        },
     });
 });

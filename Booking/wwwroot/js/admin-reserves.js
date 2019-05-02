@@ -14,6 +14,7 @@ function getReserves() {
         cache: false,
         success: function (reserves) {
             reserves = parseWithRefs(reserves);
+            checkEmpty(reserves.$values);
             $.each(reserves.$values, function (key, value) {
                 value.dateTime = new Date(Date.parse(value.dateTime));
             });

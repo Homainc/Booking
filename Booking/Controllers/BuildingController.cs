@@ -33,8 +33,10 @@ namespace Booking.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Building item)
         {
-            if (item == null)
-                return BadRequest();
+            if (item == null || string.IsNullOrWhiteSpace(item.Address))
+                return BadRequest("Адрес не введён либо состоит из пробелов");
+            if (await _appContext.Building.AnyAsync(x => x.Address.Trim() == item.Address.Trim()))
+                return BadRequest("Здание с таким адресом уже существует");
             await _appContext.AddAsync(item);
             await _appContext.SaveChangesAsync();
             return Ok(item);
@@ -44,10 +46,12 @@ namespace Booking.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(Building item)
         {
-            if (item == null)
-                return BadRequest();
+            if (item == null || string.IsNullOrWhiteSpace(item.Address))
+                return BadRequest("Адрес не введён либо состоит из пробелов");
             if (!await _appContext.Building.AnyAsync(x => x.Id == item.Id))
                 return NotFound();
+            if (await _appContext.Building.AnyAsync(x => x.Address.Trim() == item.Address.Trim()))
+                return BadRequest("Здание с таким адресом уже существует");
             _appContext.Entry(item).State = EntityState.Modified;
             await _appContext.SaveChangesAsync();
             return Ok(item);

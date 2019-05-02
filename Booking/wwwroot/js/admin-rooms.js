@@ -10,6 +10,7 @@ function getRooms() {
         contentType: 'application/json',
         success: function (rooms) {
             rooms = parseWithRefs(rooms);
+            checkEmpty(rooms.$values);
             $('#rooms_tbody').empty();
             $('#room_tmpl').tmpl(rooms.$values).appendTo('#rooms_tbody');
         }
@@ -32,6 +33,18 @@ $('#request_delete_room').on('show.bs.modal', function (e) {
     $(this).find('#delete_room_btn')[0].dataset.id = e.relatedTarget.dataset.id;
 });
 
+$('#create_room_modal').on('hide.bs.modal', function (e) {
+    let eblock = $('#create_room_errors');
+    if (!eblock.hasClass('collapse'))
+        eblock.addClass('collapse');
+});
+
+$('#edit_room_modal').on('hide.bs.modal', function (e) {
+    let eblock = $('#edit_room_errors');
+    if (!eblock.hasClass('collapse'))
+        eblock.addClass('collapse');
+});
+
 $(document).delegate('#delete_room_btn', 'click', function (e) {
     $.ajax({
         type: 'DELETE',
@@ -46,6 +59,11 @@ $(document).delegate('#delete_room_btn', 'click', function (e) {
 
 $(document).delegate('#create_room_btn', 'click', function (e) {
     let modal = $('#create_room_modal');
+    let form = $('#create_room_form');
+    form.validate();
+    if (!form.valid()) {
+        return;
+    }
     let room = {
         number: modal.find('input[name = "Number"]')[0].value,
         floor: modal.find('input[name = "Floor"]')[0].value,
@@ -60,7 +78,12 @@ $(document).delegate('#create_room_btn', 'click', function (e) {
         success: function () {
             getRooms();
             modal.modal('hide');
-        }
+        },
+        error: function (xhr, status, error) {
+            let eblock = $('#create_room_errors');
+            eblock.text(xhr.responseText);
+            eblock.removeClass('collapse');
+        },
     });
 });
 
@@ -81,6 +104,11 @@ $(document).delegate('#edit_room_btn', 'click', function (e) {
         success: function () {
             getRooms();
             modal.modal('hide');
-        }
+        },
+        error: function (xhr, status, error) {
+            let eblock = $('#edit_room_errors');
+            eblock.text(xhr.responseText);
+            eblock.removeClass('collapse');
+        },
     });
 });

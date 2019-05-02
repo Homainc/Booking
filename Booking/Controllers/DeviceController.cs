@@ -37,8 +37,8 @@ namespace Booking.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Device item)
         {
-            if (item == null)
-                return BadRequest();
+            if (item == null || string.IsNullOrWhiteSpace(item.Name))
+                return BadRequest("Наименование не введёно либо состоит из пробелов");
             await _appContext.Device.AddAsync(item);
             await _appContext.SaveChangesAsync();
             return Ok(item);
@@ -47,8 +47,8 @@ namespace Booking.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Device item)
         {
-            if (item == null)
-                return BadRequest();
+            if (item == null || string.IsNullOrWhiteSpace(item.Name))
+                return BadRequest("Наименование не введёно либо состоит из пробелов");
             if (!await _appContext.Device.AnyAsync(x => x.Id == item.Id))
                 return NotFound();
             _appContext.Entry(item).State = EntityState.Modified;

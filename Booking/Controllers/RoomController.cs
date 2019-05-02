@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Booking.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -36,8 +37,14 @@ namespace Booking.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Room room)
         {
-            if (room == null)
-                return BadRequest();
+            if (room == null || string.IsNullOrWhiteSpace(room.Number))
+                return BadRequest("Необходимо ввести номер комнаты");
+            if (!(new Regex("^[0-9]+[a-zA-Z]*$").IsMatch(room.Number)))
+                return BadRequest("Неккоректно введён номер комнаты (Примеры: 101а, 10, 10ба )");
+            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number))
+                return BadRequest("Комната с таким номером уже есть");
+            if (room.Floor < 1)
+                return BadRequest("Некорректное значение для этажа");
             await _appContext.Room.AddAsync(room);
             await _appContext.SaveChangesAsync();
             return Ok(room);
@@ -47,8 +54,14 @@ namespace Booking.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(Room room)
         {
-            if (room == null)
-                return BadRequest();
+            if (room == null || string.IsNullOrWhiteSpace(room.Number))
+                return BadRequest("Необходимо ввести номер комнаты");
+            if (!(new Regex("^[0-9]+[a-zA-Z]*$").IsMatch(room.Number)))
+                return BadRequest("Неккоректно введён номер комнаты (Примеры: 101а, 10, 10ба )");
+            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number))
+                return BadRequest("Комната с таким номером уже есть");
+            if (room.Floor < 1)
+                return BadRequest("Некорректное значение для этажа");
             if (!await _appContext.Room.AnyAsync(x => x.Id == room.Id))
                 return NotFound();
             _appContext.Entry(room).State = EntityState.Modified;
