@@ -39,9 +39,11 @@ namespace Booking.Controllers
         {
             if (room == null || string.IsNullOrWhiteSpace(room.Number))
                 return BadRequest("Необходимо ввести номер комнаты");
+            if (room.BuildingId == 0)
+                return BadRequest("Необходимо выбрать здание");
             if (!(new Regex("^[0-9]+[a-zA-Z]*$").IsMatch(room.Number)))
                 return BadRequest("Неккоректно введён номер комнаты (Примеры: 101а, 10, 10ба )");
-            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number))
+            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number && x.BuildingId == room.BuildingId))
                 return BadRequest("Комната с таким номером уже есть");
             if (room.Floor < 1)
                 return BadRequest("Некорректное значение для этажа");
@@ -56,9 +58,11 @@ namespace Booking.Controllers
         {
             if (room == null || string.IsNullOrWhiteSpace(room.Number))
                 return BadRequest("Необходимо ввести номер комнаты");
+            if (room.BuildingId == 0)
+                return BadRequest("Необходимо выбрать здание");
             if (!(new Regex("^[0-9]+[a-zA-Z]*$").IsMatch(room.Number)))
                 return BadRequest("Неккоректно введён номер комнаты (Примеры: 101а, 10, 10ба )");
-            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number))
+            if (await _appContext.Room.AnyAsync(x => x.Number == room.Number && x.BuildingId == room.BuildingId))
                 return BadRequest("Комната с таким номером уже есть");
             if (room.Floor < 1)
                 return BadRequest("Некорректное значение для этажа");
